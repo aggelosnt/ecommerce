@@ -244,10 +244,7 @@ em {
 
     border-bottom: 1px solid var(--border);
 
-    background: var(--header-bg);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    background: var(--bg);
 
     transition:
         var(--transition-theme),
@@ -826,6 +823,20 @@ html[data-theme="dark"] .moon-icon {
 }
 
 
+.hero-art .hero-circle,
+.hero-art .hero-orbit,
+.hero-art .hero-bottle {
+    animation-play-state: paused;
+}
+
+
+.hero-art.in-view .hero-circle,
+.hero-art.in-view .hero-orbit,
+.hero-art.in-view .hero-bottle {
+    animation-play-state: running;
+}
+
+
 .bottle-cap {
     width: 86px;
     height: 86px;
@@ -1375,7 +1386,7 @@ html[data-theme="dark"] .moon-icon {
             245,
             242,
             236,
-            0.86
+            0.96
         );
 
     color: #171714;
@@ -1385,8 +1396,6 @@ html[data-theme="dark"] .moon-icon {
     letter-spacing: 0.1em;
 
     text-transform: uppercase;
-
-    backdrop-filter: blur(8px);
 }
 
 
@@ -1932,6 +1941,16 @@ html[data-theme="dark"] .moon-icon {
         10s
         linear
         infinite;
+}
+
+
+.editorial .editorial-object {
+    animation-play-state: paused;
+}
+
+
+.editorial.in-view .editorial-object {
+    animation-play-state: running;
 }
 
 
@@ -2630,14 +2649,12 @@ span {
             0,
             0,
             0,
-            0.45
+            0.55
         );
 
     opacity: 0;
 
     pointer-events: none;
-
-    backdrop-filter: blur(3px);
 
     transition:
         opacity 0.35s ease;
@@ -2648,6 +2665,44 @@ span {
     opacity: 1;
 
     pointer-events: auto;
+}
+
+
+@media (min-width: 1024px) and (pointer: fine) {
+
+    .header {
+        background: var(--header-bg);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+    }
+
+
+    .product-badge {
+        background:
+            rgba(
+                245,
+                242,
+                236,
+                0.86
+            );
+
+        backdrop-filter: blur(8px);
+    }
+
+
+    .cart-overlay {
+        background:
+            rgba(
+                0,
+                0,
+                0,
+                0.45
+            );
+
+        backdrop-filter: blur(3px);
+    }
+
 }
 
 
@@ -3907,6 +3962,26 @@ span {
 
     .mobile-nav-footer p {
         display: none;
+    }
+
+}
+
+
+/* =========================================
+   SLOW UPDATE DEVICES
+========================================= */
+
+@media (update: slow) {
+
+    .hero-circle,
+    .hero-orbit,
+    .hero-bottle,
+    .object-one,
+    .object-two,
+    .object-three,
+    .marquee-track {
+        animation-play-state:
+            paused !important;
     }
 
 }
