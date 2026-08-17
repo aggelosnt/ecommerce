@@ -1,4 +1,243 @@
 // =========================================
+// MOTION / SCROLL REVEALS
+// =========================================
+// Animation setup is intentionally isolated from the
+// shop, cart and navigation code below. If one of those
+// optional features fails, page motion still starts on
+// both pointer and touch devices.
+
+function initializePageMotion() {
+
+    const revealElements =
+        document.querySelectorAll(
+            ".reveal"
+        );
+
+
+    const animatedSections = [
+        document.querySelector(
+            ".hero-art"
+        ),
+
+        document.querySelector(
+            ".editorial"
+        )
+    ].filter(Boolean);
+
+
+    const showMotionFallback = () => {
+
+        document.documentElement
+            .classList.remove(
+                "reveal-ready",
+                "motion-ready"
+            );
+
+
+        revealElements.forEach(
+            (element) => {
+
+                element.classList.add(
+                    "visible"
+                );
+
+            }
+        );
+
+
+        animatedSections.forEach(
+            (section) => {
+
+                section.classList.add(
+                    "in-view"
+                );
+
+            }
+        );
+
+    };
+
+
+    const prefersReducedMotion =
+        window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+
+    if (
+        prefersReducedMotion ||
+        !("IntersectionObserver" in window)
+    ) {
+
+        showMotionFallback();
+
+        return;
+
+    }
+
+
+    try {
+
+        const isInViewport =
+            (element) => {
+
+                const bounds =
+                    element.getBoundingClientRect();
+
+
+                return (
+                    bounds.bottom > 0 &&
+                    bounds.top <
+                        window.innerHeight
+                );
+
+            };
+
+
+        const revealObserver =
+            new IntersectionObserver(
+
+                (entries, observer) => {
+
+                    entries.forEach(
+                        (entry) => {
+
+                            if (
+                                !entry.isIntersecting
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            entry.target.classList
+                                .add(
+                                    "visible"
+                                );
+
+
+                            observer.unobserve(
+                                entry.target
+                            );
+
+                        }
+                    );
+
+                },
+
+                {
+                    threshold: 0.08,
+
+                    rootMargin:
+                        "0px 0px -24px 0px"
+                }
+
+            );
+
+
+        revealElements.forEach(
+            (element) => {
+
+                if (
+                    isInViewport(
+                        element
+                    )
+                ) {
+
+                    element.classList.add(
+                        "visible"
+                    );
+
+                    return;
+
+                }
+
+
+                revealObserver.observe(
+                    element
+                );
+
+            }
+        );
+
+
+        const animationObserver =
+            new IntersectionObserver(
+
+                (entries) => {
+
+                    entries.forEach(
+                        (entry) => {
+
+                            entry.target.classList
+                                .toggle(
+                                    "in-view",
+                                    entry.isIntersecting
+                                );
+
+                        }
+                    );
+
+                },
+
+                {
+                    threshold: 0
+                }
+
+            );
+
+
+        animatedSections.forEach(
+            (section) => {
+
+                section.classList.toggle(
+                    "in-view",
+                    isInViewport(section)
+                );
+
+
+                animationObserver.observe(
+                    section
+                );
+
+            }
+        );
+
+
+        document.documentElement
+            .classList.add(
+                "reveal-ready",
+                "motion-ready"
+            );
+
+    } catch (error) {
+
+        showMotionFallback();
+
+    }
+
+}
+
+
+if (
+    document.readyState === "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializePageMotion,
+        { once: true }
+    );
+
+} else {
+
+    initializePageMotion();
+
+}
+
+
+// =========================================
 // DOM ELEMENTS
 // =========================================
 
@@ -1040,66 +1279,6 @@ newsletterForm.addEventListener(
 
 
 // =========================================
-// SCROLL REVEAL
-// =========================================
-
-const revealElements =
-    document.querySelectorAll(
-        ".reveal"
-    );
-
-
-const revealObserver =
-    new IntersectionObserver(
-
-        (entries, observer) => {
-
-            entries.forEach(
-                (entry) => {
-
-                    if (
-                        entry.isIntersecting
-                    ) {
-
-                        entry.target.classList
-                            .add(
-                                "visible"
-                            );
-
-
-                        observer.unobserve(
-                            entry.target
-                        );
-
-                    }
-
-                }
-            );
-
-        },
-
-        {
-            threshold: 0.12,
-
-            rootMargin:
-                "0px 0px -40px 0px"
-        }
-
-    );
-
-
-revealElements.forEach(
-    (element) => {
-
-        revealObserver.observe(
-            element
-        );
-
-    }
-);
-
-
-// =========================================
 // SUBTLE HERO PARALLAX
 // =========================================
 
@@ -1127,77 +1306,16 @@ const reducedMotion =
     ).matches;
 
 
-const editorialSection =
-    document.querySelector(
-        ".editorial"
-    );
-
-
-const animatedSections = [
-    heroArt,
-    editorialSection
-].filter(Boolean);
-
-
-if (
-    "IntersectionObserver" in window
-) {
-
-    const animationObserver =
-        new IntersectionObserver(
-
-            (entries) => {
-
-                entries.forEach(
-                    (entry) => {
-
-                        entry.target.classList
-                            .toggle(
-                                "in-view",
-                                entry.isIntersecting
-                            );
-
-                    }
-                );
-
-            },
-
-            {
-                threshold: 0
-            }
-
-        );
-
-
-    animatedSections.forEach(
-        (section) => {
-
-            animationObserver.observe(
-                section
-            );
-
-        }
-    );
-
-} else {
-
-    animatedSections.forEach(
-        (section) => {
-
-            section.classList.add(
-                "in-view"
-            );
-
-        }
-    );
-
-}
-
-
 if (
     heroArt &&
+    heroBottle &&
+    heroCircle &&
     !reducedMotion &&
-    window.innerWidth > 800
+    window.matchMedia(
+        "(min-width: 801px) and " +
+        "(hover: hover) and " +
+        "(pointer: fine)"
+    ).matches
 ) {
 
     let heroRect =

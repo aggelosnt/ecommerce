@@ -823,17 +823,18 @@ html[data-theme="dark"] .moon-icon {
 }
 
 
-.hero-art .hero-circle,
-.hero-art .hero-orbit,
-.hero-art .hero-bottle {
+.motion-ready
+.hero-art:not(.in-view)
+.hero-circle,
+
+.motion-ready
+.hero-art:not(.in-view)
+.hero-orbit,
+
+.motion-ready
+.hero-art:not(.in-view)
+.hero-bottle {
     animation-play-state: paused;
-}
-
-
-.hero-art.in-view .hero-circle,
-.hero-art.in-view .hero-orbit,
-.hero-art.in-view .hero-bottle {
-    animation-play-state: running;
 }
 
 
@@ -1944,13 +1945,10 @@ html[data-theme="dark"] .moon-icon {
 }
 
 
-.editorial .editorial-object {
+.motion-ready
+.editorial:not(.in-view)
+.editorial-object {
     animation-play-state: paused;
-}
-
-
-.editorial.in-view .editorial-object {
-    animation-play-state: running;
 }
 
 
@@ -3281,6 +3279,14 @@ span {
 ========================================= */
 
 .reveal {
+    opacity: 1;
+
+    transform: none;
+}
+
+
+.reveal-ready
+.reveal:not(.visible) {
     opacity: 0;
 
     transform:
@@ -3297,11 +3303,11 @@ span {
 }
 
 
+.reveal-ready
 .reveal.visible {
     opacity: 1;
 
-    transform:
-        translateY(0);
+    transform: none;
 }
 
 
@@ -3968,26 +3974,6 @@ span {
 
 
 /* =========================================
-   SLOW UPDATE DEVICES
-========================================= */
-
-@media (update: slow) {
-
-    .hero-circle,
-    .hero-orbit,
-    .hero-bottle,
-    .object-one,
-    .object-two,
-    .object-three,
-    .marquee-track {
-        animation-play-state:
-            paused !important;
-    }
-
-}
-
-
-/* =========================================
    REDUCED MOTION
 ========================================= */
 
@@ -3998,24 +3984,130 @@ span {
     }
 
 
-    *,
-    *::before,
-    *::after {
-        animation-duration:
-            0.01ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-        transition-duration:
-            0.01ms !important;
+    .hero-animate {
+        animation-duration: 0.2s;
     }
 
+
+    .hero-circle {
+        animation-name:
+            heroCircleFloatReduced;
+
+        animation-duration: 14s;
+    }
+
+
+    .hero-bottle {
+        animation-name:
+            bottleFloatReduced;
+
+        animation-duration: 12s;
+    }
+
+
+    .object-one {
+        animation-name:
+            editorialFloatOneReduced;
+
+        animation-duration: 16s;
+    }
+
+
+    .object-two {
+        animation-name:
+            editorialFloatTwoReduced;
+
+        animation-duration: 16s;
+    }
+
+
+    .hero-orbit,
+    .object-three,
+    .marquee-track {
+        animation: none;
+    }
+
+
+    .reveal-ready
+    .reveal:not(.visible),
 
     .reveal {
         opacity: 1;
 
         transform: none;
+
+        transition:
+            opacity 0.2s ease;
+    }
+
+}
+
+
+@keyframes bottleFloatReduced {
+
+    0%,
+    100% {
+        transform:
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            translateY(-3px);
+    }
+
+}
+
+
+@keyframes heroCircleFloatReduced {
+
+    0%,
+    100% {
+        transform:
+            translate(0, 0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate(2px, -3px)
+            scale(1.005);
+    }
+
+}
+
+
+@keyframes editorialFloatOneReduced {
+
+    0%,
+    100% {
+        transform:
+            rotate(-20deg)
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            rotate(-20deg)
+            translateY(-3px);
+    }
+
+}
+
+
+@keyframes editorialFloatTwoReduced {
+
+    0%,
+    100% {
+        transform:
+            rotate(30deg)
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            rotate(30deg)
+            translateY(3px);
     }
 
 }
