@@ -1306,6 +1306,73 @@ const reducedMotion =
     ).matches;
 
 
+const editorialSection =
+    document.querySelector(
+        ".editorial"
+    );
+
+
+const animatedSections = [
+    heroArt,
+    editorialSection
+].filter(Boolean);
+
+
+if (
+    "IntersectionObserver" in window
+) {
+
+    const animationObserver =
+        new IntersectionObserver(
+
+            (entries) => {
+
+                entries.forEach(
+                    (entry) => {
+
+                        entry.target.classList
+                            .toggle(
+                                "in-view",
+                                entry.isIntersecting
+                            );
+
+                    }
+                );
+
+            },
+
+            {
+                threshold: 0
+            }
+
+        );
+
+
+    animatedSections.forEach(
+        (section) => {
+
+            animationObserver.observe(
+                section
+            );
+
+        }
+    );
+
+} else {
+
+    animatedSections.forEach(
+        (section) => {
+
+            section.classList.add(
+                "in-view"
+            );
+
+        }
+    );
+
+}
+
+
 if (
     heroArt &&
     heroBottle &&
